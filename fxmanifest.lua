@@ -7,7 +7,6 @@ version '1.0.0'
 shared_script 'config/config.lua'
 
 server_scripts {
-    '@oxmysql/lib/MySQL.lua',
     'server/wrappers/business.lua',
     'server/wrappers/useraccounts.lua',
     'server/wrappers/gangs.lua',

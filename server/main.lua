@@ -1,7 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 CreateThread(function()
-    local accts = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Business' })
+    local accts = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Business' })
     if accts[1] ~= nil then
         for k, v in pairs(accts) do
             local acctType = v.business
@@ -13,14 +13,14 @@ CreateThread(function()
         end
     end
 
-    local savings = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Savings' })
+    local savings = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Savings' })
     if savings[1] ~= nil then
         for k, v in pairs(savings) do
             savingsAccounts[v.citizenid] = generateSavings(v.citizenid)
         end
     end
 
-    local gangs = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Gang' })
+    local gangs = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_type = ?', { 'Gang' })
     if gangs[1] ~= nil then
         for k, v in pairs(gangs) do
             gangAccounts[v.gangid] = loadGangAccount(v.gangid)
@@ -94,7 +94,7 @@ local function checkAccountExists(acct, sc)
     local cid
     local actype
     local processed = false
-    local exists = MySQL.Sync.fetchAll('SELECT * FROM bank_accounts WHERE account_number = ? AND sort_code = ?', { acct, sc })
+    local exists = exports.oxmysql:executeSync('SELECT * FROM bank_accounts WHERE account_number = ? AND sort_code = ?', { acct, sc })
     if exists[1] ~= nil then
         success = true
         cid = exists[1].character_id
